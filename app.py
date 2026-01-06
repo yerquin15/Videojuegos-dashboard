@@ -6,7 +6,7 @@ st.set_page_config(page_title="Video Games Dashboard", layout="wide", page_icon=
 
 @st.cache_data
 def load_data():
-    url = "https://github.com/yerquin15/nba-dashboard-streamlit/releases/download/v1.0/normalized_dataset.csv"
+    url = "https://github.com/yerquin15/Videojuegos-dashboard/releases/download/v1.0/normalized_dataset.csv"
     return pd.read_csv(url)
 
 df = load_data()
