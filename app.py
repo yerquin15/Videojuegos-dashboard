@@ -53,6 +53,61 @@ col2.metric(" Precio promedio", f"${filtered['price'].mean():.2f}")
 col3.metric(" % Positivo promedio", f"{filtered['porcentaje_positive_total'].mean()*100:.1f}%")
 col4.metric(" Tiempo promedio", f"{filtered['average_playtime_forever'].mean():.1f} hrs")
 
+st.subheader("📊 Visualización dinámica")
+
+numeric_cols = filtered.select_dtypes(include=["int64", "float64"]).columns.tolist()
+
+selected_vars = st.multiselect(
+    "Selecciona hasta 3 variables numéricas",
+    numeric_cols,
+    max_selections=3
+)
+if len(selected_vars) == 1:
+    st.markdown("### Histograma")
+
+    fig, ax = plt.subplots()
+    ax.hist(filtered[selected_vars[0]].dropna(), bins=30)
+    ax.set_xlabel(selected_vars[0])
+    ax.set_ylabel("Frecuencia")
+    st.pyplot(fig)
+
+elif len(selected_vars) == 2:
+    st.markdown("### Scatter Plot")
+
+    fig, ax = plt.subplots()
+    ax.scatter(
+        filtered[selected_vars[0]],
+        filtered[selected_vars[1]],
+        alpha=0.5
+    )
+    ax.set_xlabel(selected_vars[0])
+    ax.set_ylabel(selected_vars[1])
+    st.pyplot(fig)
+
+elif len(selected_vars) == 3:
+    st.markdown("### Scatter Plot 3D")
+
+    from mpl_toolkits.mplot3d import Axes3D
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection="3d")
+
+    ax.scatter(
+        filtered[selected_vars[0]],
+        filtered[selected_vars[1]],
+        filtered[selected_vars[2]],
+        alpha=0.5
+    )
+
+    ax.set_xlabel(selected_vars[0])
+    ax.set_ylabel(selected_vars[1])
+    ax.set_zlabel(selected_vars[2])
+
+    st.pyplot(fig)
+
+else:
+    st.info("Selecciona entre 1 y 3 variables para visualizar.")
+
 
 # Gráficas
 
