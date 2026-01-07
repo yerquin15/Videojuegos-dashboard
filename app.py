@@ -18,7 +18,7 @@ st.set_page_config(
 
 @st.cache_data(show_spinner=True)
 def load_data():
-    url = "https://github.com/yerquin15/nba-dashboard-streamlit/releases/download/v1.0/normalized_dataset.csv"
+    url = "https://github.com/yerquin15/Videojuegos-dashboard/releases/download/v1.0/normalized_dataset.csv"
     return pd.read_csv(url, low_memory=False)
 
 df = load_data()
