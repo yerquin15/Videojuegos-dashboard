@@ -517,28 +517,7 @@ with tab4:
         high_rated = filtered[filtered['porcentaje_positive_total'] > 0.85]
         low_reviews = filtered[filtered['total_num_reviews'] < filtered['total_num_reviews'].quantile(0.25)]
         
-        st.markdown(f"""
-        **Insights principales:**
-        
-        1. **Calidad vs Popularidad**: {len(high_rated)} juegos ({len(high_rated)/len(filtered)*100:.1f}%) tienen valoraciones superiores al 85%, 
-           pero solo el {len(high_rated[high_rated['total_num_reviews'] > filtered['total_num_reviews'].median()])/len(high_rated)*100:.1f}% 
-           tiene popularidad por encima de la mediana.
-        
-        2. **Relación Precio-Calidad**: La correlación entre precio y valoración es de {filtered[['price', 'porcentaje_positive_total']].corr().iloc[0,1]:.3f}, 
-           indicando que el precio {'es' if abs(filtered[['price', 'porcentaje_positive_total']].corr().iloc[0,1]) > 0.3 else 'no es'} un predictor fuerte de calidad.
-        
-        3. **Juegos de Nicho**: {len(low_reviews[low_reviews['porcentaje_positive_total'] > 0.8])} juegos de nicho (baja popularidad) 
-           mantienen excelente recepción crítica (>80%).
-        
-        4. **Engagement**: Los juegos con valoraciones superiores a 80% tienen un tiempo promedio de juego de 
-           {filtered[filtered['porcentaje_positive_total'] > 0.8]['average_playtime_forever'].mean():.1f} horas, 
-           {((filtered[filtered['porcentaje_positive_total'] > 0.8]['average_playtime_forever'].mean() / filtered['average_playtime_forever'].mean() - 1) * 100):.1f}% 
-           {'más' if filtered[filtered['porcentaje_positive_total'] > 0.8]['average_playtime_forever'].mean() > filtered['average_playtime_forever'].mean() else 'menos'} 
-           que el promedio general.
-        
-        5. **Tendencia de Mercado**: El año {int(year)} presenta {len(filtered)} lanzamientos con un precio promedio de ${filtered['price'].mean():.2f}.
-        """)
-    
+       
     with col2:
         st.subheader("Top Performers")
         
