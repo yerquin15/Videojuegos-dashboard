@@ -127,46 +127,75 @@ tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
 with tab1:
     st.title("Dashboard de Videojuegos")
     st.markdown(f"### Análisis de {int(year_range[0])} a {int(year_range[1])}")
-    
-    # Métricas principales
+   
+    # Métricas principales (CORREGIDAS Y MEJORADAS)
     col1, col2, col3, col4 = st.columns(4)
-    
+
+    # --- Cálculo para comparar número de juegos con el período anterior ---
+    range_size = year_range[1] - year_range[0] + 1                    # Tamaño del rango actual (ej: 5 años)
+    prev_start = year_range[0] - range_size                            # Año inicio del rango anterior
+    prev_end = year_range[0] - 1                                       # Año fin del rango anterior
+
+    prev_filtered = df[
+        (df["release_year"] >= prev_start) &
+        (df["release_year"] <= prev_end) &
+        (df["required_age"].isin(age)) &
+        (df["porcentaje_positive_total"] * 100 >= min_rating)
+    ].copy()
+
+    delta_games = len(filtered) - len(prev_filtered)
+
+    # --- Métricas ---
     with col1:
         st.metric(
-            "Número de juegos",
-            f"{len(filtered):,}",
-            delta=f"{len(filtered) - len(df[df['release_year'] == year])}" if year else None
+            label="Número de juegos",
+            value=f"{len(filtered):,}",
+            delta=f"{delta_games:+,}" if len(prev_filtered) > 0 else "—",
+            delta_color="normal",
+            help="Comparado con el mismo rango de años anterior"
         )
-    
+   
     with col2:
         avg_price = filtered['price'].mean()
+        overall_avg_price = df['price'].mean()
+        price_delta = avg_price - overall_avg_price if not pd.isna(avg_price) else None
         st.metric(
-            "Precio promedio",
-            f"${avg_price:.2f}",
-            delta=f"${avg_price - df['price'].mean():.2f}"
+            label="Precio promedio",
+            value=f"${avg_price:.2f}" if not pd.isna(avg_price) else "—",
+            delta=f"${price_delta:+.2f}" if price_delta is not None else None,
+            delta_color="normal",
+            help="Comparado con el promedio histórico del dataset completo"
         )
-    
+   
     with col3:
         avg_rating = filtered['porcentaje_positive_total'].mean() * 100
+        overall_avg_rating = df['porcentaje_positive_total'].mean() * 100
+        rating_delta = avg_rating - overall_avg_rating if not pd.isna(avg_rating) else None
         st.metric(
-            "Valoración promedio",
-            f"{avg_rating:.1f}%",
-            delta=f"{avg_rating - (df['porcentaje_positive_total'].mean() * 100):.1f}%"
+            label="Valoración promedio",
+            value=f"{avg_rating:.1f}%" if not pd.isna(avg_rating) else "—",
+            delta=f"{rating_delta:+.1f} pp" if rating_delta is not None else None,
+            delta_color="normal",
+            help="Comparado con el promedio histórico del dataset completo (pp = puntos porcentuales)"
         )
-    
+   
     with col4:
         avg_playtime = filtered['average_playtime_forever'].mean()
+        overall_playtime = df['average_playtime_forever'].mean()
+        playtime_delta = avg_playtime - overall_playtime if not pd.isna(avg_playtime) else None
         st.metric(
-            "Tiempo promedio",
-            f"{avg_playtime:.1f} hrs",
-            delta=f"{avg_playtime - df['average_playtime_forever'].mean():.1f}"
+            label="Tiempo promedio",
+            value=f"{avg_playtime:.1f} hrs" if not pd.isna(avg_playtime) else "—",
+            delta=f"{playtime_delta:+.1f} hrs" if playtime_delta is not None else None,
+            delta_color="normal",
+            help="Comparado con el promedio histórico del dataset completo"
         )
-    
+   
     st.markdown("---")
-    
+   
     # Gráficos principales
     col_left, col_right = st.columns(2)
-    
+   
     with col_left:
         st.subheader("Relación Precio vs Valoración")
         fig_price_rating = px.scatter(
@@ -192,7 +221,7 @@ with tab1:
             legend=dict(orientation="h", yanchor="bottom", y=-0.3)
         )
         st.plotly_chart(fig_price_rating, use_container_width=True)
-    
+   
     with col_right:
         st.subheader("Popularidad vs Calidad")
         fig_popularity = px.scatter(
@@ -214,12 +243,12 @@ with tab1:
         )
         fig_popularity.update_layout(height=400)
         st.plotly_chart(fig_popularity, use_container_width=True)
-    
+   
     st.markdown("---")
-    
+   
     # Distribución de precios y valoraciones
     col1, col2 = st.columns(2)
-    
+   
     with col1:
         st.subheader("Distribución de Precios")
         fig_price_dist = go.Figure()
@@ -238,7 +267,7 @@ with tab1:
             showlegend=False
         )
         st.plotly_chart(fig_price_dist, use_container_width=True)
-    
+   
     with col2:
         st.subheader("Distribución de Valoraciones")
         fig_rating_dist = go.Figure()
@@ -257,7 +286,6 @@ with tab1:
             showlegend=False
         )
         st.plotly_chart(fig_rating_dist, use_container_width=True)
-
 # ==================================================
 # TAB 2 - ANÁLISIS EXPLORATORIO
 # ==================================================
