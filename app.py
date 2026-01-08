@@ -580,7 +580,7 @@ with tab5:
         st.subheader("Word Cloud 2 - Términos más frecuentes en todas las reseñas")
         st.image("images/wordcloud_negative_or_general.png", use_container_width=True)
         # O con URL raw:
-        # st.image("https://raw.githubusercontent.com/yerquin15/Videojuegos-dashboard/main/images/wordcloud_general.png", use_container_width=True)
+        # st.image("https://github.com/yerquin15/Videojuegos-dashboard/blob/main/wcn.png", use_container_width=True)
 
     st.markdown("---")
     
