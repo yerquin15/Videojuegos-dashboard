@@ -74,13 +74,13 @@ if df.empty:
 # SIDEBAR - FILTROS
 # ==================================================
 st.sidebar.image("https://via.placeholder.com/300x100/0e1117/00D4FF?text=Gaming+Analytics", use_container_width=True)
-st.sidebar.title("🎮 Filtros de Análisis")
+st.sidebar.title(" Filtros de Análisis")
 st.sidebar.markdown("---")
 
 # Filtro de año
 year_options = sorted([y for y in df["release_year"].dropna().unique() if not np.isnan(y)], reverse=True)
 year = st.sidebar.selectbox(
-    "📅 Año de lanzamiento",
+    " Año de lanzamiento",
     year_options,
     index=0
 )
@@ -88,21 +88,11 @@ year = st.sidebar.selectbox(
 # Filtro de clasificación ESRB
 age_options = sorted(df["required_age"].dropna().unique())
 age = st.sidebar.multiselect(
-    "🔞 Clasificación ESRB",
+    " Clasificación ESRB",
     age_options,
     default=age_options
 )
 
-# Filtro de precio
-min_price = float(df["price"].min())
-max_price = float(df["price"].max())
-price_range = st.sidebar.slider(
-    "💰 Rango de precio ($)",
-    min_price,
-    max_price,
-    (min_price, max_price),
-    step=1.0
-)
 
 # Filtro de valoración mínima
 min_rating = st.sidebar.slider(
@@ -113,8 +103,6 @@ min_rating = st.sidebar.slider(
     step=5.0
 )
 
-st.sidebar.markdown("---")
-st.sidebar.info("💡 **Tip:** Usa los filtros para explorar diferentes segmentos del mercado de videojuegos.")
 
 # Aplicar filtros
 filtered = df[
@@ -128,17 +116,17 @@ filtered = df[
 # TABS PRINCIPALES
 # ==================================================
 tab1, tab2, tab3, tab4 = st.tabs([
-    "📊 Visión General",
-    "🔍 Análisis Exploratorio",
-    "📈 Tendencias Temporales",
-    "🎯 Insights Avanzados"
+    " Visión General",
+    " Análisis Exploratorio",
+    " Tendencias Temporales",
+    " Insights Avanzados"
 ])
 
 # ==================================================
 # TAB 1 - VISIÓN GENERAL
 # ==================================================
 with tab1:
-    st.title("🎮 Dashboard de Videojuegos")
+    st.title(" Dashboard de Videojuegos")
     st.markdown(f"### Análisis del año **{int(year)}**")
     
     # Métricas principales
@@ -146,7 +134,7 @@ with tab1:
     
     with col1:
         st.metric(
-            "🎯 Número de juegos",
+            " Número de juegos",
             f"{len(filtered):,}",
             delta=f"{len(filtered) - len(df[df['release_year'] == year])}" if year else None
         )
@@ -154,7 +142,7 @@ with tab1:
     with col2:
         avg_price = filtered['price'].mean()
         st.metric(
-            "💵 Precio promedio",
+            " Precio promedio",
             f"${avg_price:.2f}",
             delta=f"${avg_price - df['price'].mean():.2f}"
         )
@@ -162,7 +150,7 @@ with tab1:
     with col3:
         avg_rating = filtered['porcentaje_positive_total'].mean() * 100
         st.metric(
-            "⭐ Valoración promedio",
+            " Valoración promedio",
             f"{avg_rating:.1f}%",
             delta=f"{avg_rating - (df['porcentaje_positive_total'].mean() * 100):.1f}%"
         )
@@ -170,7 +158,7 @@ with tab1:
     with col4:
         avg_playtime = filtered['average_playtime_forever'].mean()
         st.metric(
-            "⏱️ Tiempo promedio",
+            " Tiempo promedio",
             f"{avg_playtime:.1f} hrs",
             delta=f"{avg_playtime - df['average_playtime_forever'].mean():.1f}"
         )
@@ -181,7 +169,7 @@ with tab1:
     col_left, col_right = st.columns(2)
     
     with col_left:
-        st.subheader("💰 Relación Precio vs Valoración")
+        st.subheader(" Relación Precio vs Valoración")
         fig_price_rating = px.scatter(
             filtered,
             x="price",
@@ -207,7 +195,7 @@ with tab1:
         st.plotly_chart(fig_price_rating, use_container_width=True)
     
     with col_right:
-        st.subheader("📊 Popularidad vs Calidad")
+        st.subheader(" Popularidad vs Calidad")
         fig_popularity = px.scatter(
             filtered,
             x="total_num_reviews",
@@ -234,7 +222,7 @@ with tab1:
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("📉 Distribución de Precios")
+        st.subheader(" Distribución de Precios")
         fig_price_dist = go.Figure()
         fig_price_dist.add_trace(go.Histogram(
             x=filtered['price'],
@@ -253,7 +241,7 @@ with tab1:
         st.plotly_chart(fig_price_dist, use_container_width=True)
     
     with col2:
-        st.subheader("📈 Distribución de Valoraciones")
+        st.subheader(" Distribución de Valoraciones")
         fig_rating_dist = go.Figure()
         fig_rating_dist.add_trace(go.Histogram(
             x=filtered['porcentaje_positive_total'] * 100,
@@ -275,12 +263,12 @@ with tab1:
 # TAB 2 - ANÁLISIS EXPLORATORIO
 # ==================================================
 with tab2:
-    st.header("🔍 Análisis Exploratorio de Datos")
+    st.header(" Análisis Exploratorio de Datos")
     
     col1, col2 = st.columns([1, 2])
     
     with col1:
-        st.subheader("🔞 Distribución ESRB")
+        st.subheader(" Distribución ESRB")
         esrb_counts = filtered["required_age"].value_counts()
         
         fig_esrb = go.Figure(data=[go.Pie(
@@ -297,13 +285,13 @@ with tab2:
         st.plotly_chart(fig_esrb, use_container_width=True)
         
         # Estadísticas por ESRB
-        st.markdown("**📊 Stats por clasificación:**")
+        st.markdown("** Stats por clasificación:**")
         for age_val in esrb_counts.index[:3]:
             subset = filtered[filtered['required_age'] == age_val]
             st.markdown(f"**{age_val}:** {len(subset)} juegos - Precio avg: ${subset['price'].mean():.2f}")
     
     with col2:
-        st.subheader("🎯 Top 10 Juegos Mejor Valorados")
+        st.subheader(" Top 10 Juegos Mejor Valorados")
         if 'name' in filtered.columns:
             top_games = filtered.nlargest(10, 'porcentaje_positive_total')[
                 ['name', 'porcentaje_positive_total', 'price', 'total_num_reviews']
@@ -330,7 +318,7 @@ with tab2:
     st.markdown("---")
     
     # Explorador dinámico mejorado
-    st.subheader("🔬 Explorador Dinámico de Variables")
+    st.subheader(" Explorador Dinámico de Variables")
     
     numeric_cols = filtered.select_dtypes(include=["int64", "float64"]).columns.tolist()
     
@@ -369,7 +357,7 @@ with tab2:
         # Correlación
         if len(selected_vars) == 2:
             corr_val = filtered[selected_vars].corr().iloc[0, 1]
-            st.info(f"📊 **Correlación:** {corr_val:.3f}")
+            st.info(f" **Correlación:** {corr_val:.3f}")
     
     elif len(selected_vars) == 3:
         col1, col2 = st.columns([2, 1])
@@ -411,7 +399,7 @@ with tab2:
 # TAB 3 - TENDENCIAS TEMPORALES
 # ==================================================
 with tab3:
-    st.header("📈 Análisis de Tendencias Temporales")
+    st.header(" Análisis de Tendencias Temporales")
     
     # Preparar datos anuales
     annual = (
@@ -432,7 +420,7 @@ with tab3:
     )
     
     # Gráfico de evolución múltiple
-    st.subheader("📊 Evolución de Métricas Clave")
+    st.subheader(" Evolución de Métricas Clave")
     
     fig_multi = make_subplots(
         rows=2, cols=2,
@@ -490,7 +478,7 @@ with tab3:
         with col1:
             growth_games = ((last_year['num_juegos'] - first_year['num_juegos']) / first_year['num_juegos'] * 100)
             st.metric(
-                "📈 Crecimiento en lanzamientos",
+                " Crecimiento en lanzamientos",
                 f"{growth_games:+.1f}%",
                 delta=f"{int(last_year['num_juegos'] - first_year['num_juegos'])} juegos"
             )
@@ -498,7 +486,7 @@ with tab3:
         with col2:
             growth_price = ((last_year['precio_promedio'] - first_year['precio_promedio']) / first_year['precio_promedio'] * 100)
             st.metric(
-                "💰 Cambio en precio promedio",
+                " Cambio en precio promedio",
                 f"{growth_price:+.1f}%",
                 delta=f"${last_year['precio_promedio'] - first_year['precio_promedio']:.2f}"
             )
@@ -506,7 +494,7 @@ with tab3:
         with col3:
             rating_change = last_year['valoracion_promedio'] - first_year['valoracion_promedio']
             st.metric(
-                "⭐ Cambio en valoración",
+                " Cambio en valoración",
                 f"{rating_change:+.1f}%",
                 delta="Mejora" if rating_change > 0 else "Descenso"
             )
@@ -515,10 +503,10 @@ with tab3:
 # TAB 4 - INSIGHTS AVANZADOS
 # ==================================================
 with tab4:
-    st.header("🎯 Insights y Análisis Avanzado")
+    st.header(" Insights y Análisis Avanzado")
     
     # Análisis de segmentos
-    st.subheader("💎 Segmentación de Mercado")
+    st.subheader(" Segmentación de Mercado")
     
     # Crear segmentos por precio y valoración
     filtered_copy = filtered.copy()
@@ -555,14 +543,14 @@ with tab4:
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        st.subheader("🔍 Hallazgos Clave del Análisis")
+        st.subheader(" Hallazgos Clave del Análisis")
         
         # Calcular insights automáticos
         high_rated = filtered[filtered['porcentaje_positive_total'] > 0.85]
         low_reviews = filtered[filtered['total_num_reviews'] < filtered['total_num_reviews'].quantile(0.25)]
         
         st.markdown(f"""
-        **📊 Insights principales:**
+        ** Insights principales:**
         
         1. **Calidad vs Popularidad**: {len(high_rated)} juegos ({len(high_rated)/len(filtered)*100:.1f}%) tienen valoraciones superiores al 85%, 
            pero solo el {len(high_rated[high_rated['total_num_reviews'] > filtered['total_num_reviews'].median()])/len(high_rated)*100:.1f}% 
@@ -584,30 +572,30 @@ with tab4:
         """)
     
     with col2:
-        st.subheader("🏆 Top Performers")
+        st.subheader(" Top Performers")
         
         # Identificar mejores juegos
         if 'name' in filtered.columns:
             # Mejor valorado
             best_rated = filtered.nlargest(1, 'porcentaje_positive_total').iloc[0]
-            st.markdown(f"**⭐ Mejor Valorado:**")
+            st.markdown(f"** Mejor Valorado:**")
             st.info(f"{best_rated['name'] if 'name' in filtered.columns else 'N/A'}\n\n{best_rated['porcentaje_positive_total']*100:.1f}% positive")
             
             # Más popular
             most_popular = filtered.nlargest(1, 'total_num_reviews').iloc[0]
-            st.markdown(f"**🔥 Más Popular:**")
+            st.markdown(f"** Más Popular:**")
             st.info(f"{most_popular['name'] if 'name' in filtered.columns else 'N/A'}\n\n{int(most_popular['total_num_reviews']):,} reviews")
             
             # Mejor relación calidad-precio
             filtered_copy['value_score'] = filtered_copy['porcentaje_positive_total'] / (filtered_copy['price'] + 1)
             best_value = filtered_copy.nlargest(1, 'value_score').iloc[0]
-            st.markdown(f"**💰 Mejor Valor:**")
+            st.markdown(f"** Mejor Valor:**")
             st.success(f"{best_value['name'] if 'name' in filtered.columns else 'N/A'}\n\n${best_value['price']:.2f} - {best_value['porcentaje_positive_total']*100:.1f}%")
     
     st.markdown("---")
     
     # Tabla de datos filtrados
-    st.subheader("📋 Datos Filtrados")
+    st.subheader(" Datos Filtrados")
     
     display_cols = ['name', 'price', 'porcentaje_positive_total', 'total_num_reviews', 
                     'average_playtime_forever', 'required_age', 'release_year']
@@ -624,18 +612,4 @@ with tab4:
             use_container_width=True,
             hide_index=True
         )
-        
-       
 
-# ==================================================
-# FOOTER
-# ==================================================
-st.markdown("---")
-st.markdown(
-    """
-    <div style='text-align: center; color: #666;'>
-        <p>🎮 Video Games Dashboard | Powered by Streamlit & Plotly | Datos actualizados 2025</p>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
