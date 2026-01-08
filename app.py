@@ -561,41 +561,34 @@ with tab4:
 
 
 # ==================================================
-# TAB 5 - GALERÍA VISUAL
+# TAB 5 - NLP (Wordclouds)
 # ==================================================
 with tab5:
-    st.header("NLP")
-    
-    # Sección de imagen de portada
-    st.subheader("Wordclouds")
-    
-    banner_image = st.file_uploader(
-        "Selecciona primera imagen",
-        type=["png", "jpg", "jpeg", "webp"],
-        key="banner_upload_1"
-    )
+    st.header("Análisis NLP: Word Clouds")
+    st.markdown("### Nubes de palabras generadas a partir de reseñas y descripciones de juegos")
 
-    banner_image2 = st.file_uploader(
-        "Selecciona segunda imagen",
-        type=["png", "jpg", "jpeg", "webp"],
-        key="banner_upload_2"
-    )
-    
-    if banner_image:
-        from PIL import Image
-        img = Image.open(banner_image)
-        st.image(img, use_container_width=True, caption="WordCloud 1")
-    else:
-        st.info("Sube la primera imagen de wordcloud")
+    col1, col2 = st.columns(2)
 
-    if banner_image2:
-        from PIL import Image
-        img2 = Image.open(banner_image2)
-        st.image(img2, use_container_width=True, caption="WordCloud 2")
-    else:
-        st.info("Sube la segunda imagen de wordcloud")
-    
+    with col1:
+        st.subheader("Word Cloud 1 - Términos más frecuentes en reseñas positivas")
+        # Ruta relativa si la carpeta images está en el root del repo
+        st.image("images/wordcloud_positive.png", use_container_width=True)
+        # O si prefieres URL directa de GitHub raw:
+        # st.image("https://raw.githubusercontent.com/yerquin15/Videojuegos-dashboard/main/images/wordcloud_positive.png", use_container_width=True)
+
+    with col2:
+        st.subheader("Word Cloud 2 - Términos más frecuentes en todas las reseñas")
+        st.image("images/wordcloud_negative_or_general.png", use_container_width=True)
+        # O con URL raw:
+        # st.image("https://raw.githubusercontent.com/yerquin15/Videojuegos-dashboard/main/images/wordcloud_general.png", use_container_width=True)
+
     st.markdown("---")
+    
+    st.info("""
+    **Interpretación:**  
+    Las nubes de palabras muestran los términos más repetidos en las reseñas de Steam.  
+    Palabras grandes = más frecuentes. Esto ayuda a identificar temas comunes como mecánicas de juego, emociones de los jugadores, géneros populares, etc.
+    """)
 
 # ==================================================
 # TAB 6 - ANÁLISIS DE CORRELACIONES
