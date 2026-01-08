@@ -574,7 +574,7 @@ with tab5:
         # Ruta relativa si la carpeta images está en el root del repo
         st.image("images/wordcloud_positive.png", use_container_width=True)
         # O si prefieres URL directa de GitHub raw:
-        # st.image("https://raw.githubusercontent.com/yerquin15/Videojuegos-dashboard/main/images/wordcloud_positive.png", use_container_width=True)
+        # st.image("https://github.com/yerquin15/Videojuegos-dashboard/blob/main/dfsvrw.png", use_container_width=True)
 
     with col2:
         st.subheader("Word Cloud 2 - Términos más frecuentes en todas las reseñas")
