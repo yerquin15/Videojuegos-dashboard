@@ -572,15 +572,11 @@ with tab5:
     with col1:
         st.subheader("Word Cloud 1 - Términos más frecuentes en reseñas positivas")
         # Ruta relativa si la carpeta images está en el root del repo
-        st.image("images/wordcloud_positive.png", use_container_width=True)
-        # O si prefieres URL directa de GitHub raw:
-        # st.image("https://github.com/yerquin15/Videojuegos-dashboard/blob/main/dfsvrw.png", use_container_width=True)
-
+        st.image("https://github.com/yerquin15/Videojuegos-dashboard/blob/main/dfsvrw.png", use_container_width=True)
+        
     with col2:
         st.subheader("Word Cloud 2 - Términos más frecuentes en todas las reseñas")
-        st.image("images/wordcloud_negative_or_general.png", use_container_width=True)
-        # O con URL raw:
-        # st.image("https://github.com/yerquin15/Videojuegos-dashboard/blob/main/wcn.png", use_container_width=True)
+        st.image("https://github.com/yerquin15/Videojuegos-dashboard/blob/main/wcn.png", use_container_width=True)
 
     st.markdown("---")
     
