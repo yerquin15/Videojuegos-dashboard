@@ -398,7 +398,6 @@ with tab3:
     annual = (
         df[
             (df["required_age"].isin(age)) &
-            (df["price"].between(price_range[0], price_range[1]))
         ]
         .groupby("release_year")
         .agg(
