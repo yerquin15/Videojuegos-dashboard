@@ -40,13 +40,12 @@ st.markdown(
 
 sns.set_theme(style="darkgrid", palette="muted")
 
-# ==================================================
 # CARGA DE DATOS
 # ==================================================
 @st.cache_data(show_spinner=True)
 def load_data():
     try:
-        url = "https://github.com/yerquin15/Videojuegos-dashboard/releases/download/v1.0/normalized_dataset.csv"
+        url = "https://github.com/yerquin15/Proyecto-AVD-Videojuegos/releases/download/v1.0/normalized_dataset.csv"
         df = pd.read_csv(url, low_memory=False)
         
         # Limpieza básica
@@ -64,10 +63,8 @@ df = load_data()
 if df.empty:
     st.stop()
 
-# ==================================================
 # SIDEBAR - FILTROS
 # ==================================================
-st.sidebar.image("https://via.placeholder.com/300x100/0e1117/00D4FF?text=Gaming+Analytics", use_container_width=True)
 st.sidebar.title("Filtros de Análisis")
 st.sidebar.markdown("---")
 
@@ -109,8 +106,8 @@ filtered = df[
     (df["porcentaje_positive_total"] * 100 >= min_rating)
 ].copy()
 
-# ==================================================
-# TABS PRINCIPALES
+
+# TABS 
 # ==================================================
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "Visión General",
@@ -121,20 +118,18 @@ tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "Correlaciones"
 ])
 
-# ==================================================
-# TAB 1 - VISIÓN GENERAL
+# TAB 1
 # ==================================================
 with tab1:
     st.title("Dashboard de Videojuegos")
     st.markdown(f"### Análisis de {int(year_range[0])} a {int(year_range[1])}")
    
-    # Métricas principales (CORREGIDAS Y MEJORADAS)
+    # Métricas principales 
     col1, col2, col3, col4 = st.columns(4)
 
-    # --- Cálculo para comparar número de juegos con el período anterior ---
-    range_size = year_range[1] - year_range[0] + 1                    # Tamaño del rango actual (ej: 5 años)
-    prev_start = year_range[0] - range_size                            # Año inicio del rango anterior
-    prev_end = year_range[0] - 1                                       # Año fin del rango anterior
+    range_size = year_range[1] - year_range[0] + 1                   
+    prev_start = year_range[0] - range_size                           
+    prev_end = year_range[0] - 1                                     
 
     prev_filtered = df[
         (df["release_year"] >= prev_start) &
@@ -145,7 +140,7 @@ with tab1:
 
     delta_games = len(filtered) - len(prev_filtered)
 
-    # --- Métricas ---
+    # Métricas 
     with col1:
         st.metric(
             label="Número de juegos",
@@ -286,8 +281,8 @@ with tab1:
             showlegend=False
         )
         st.plotly_chart(fig_rating_dist, use_container_width=True)
-# ==================================================
-# TAB 2 - ANÁLISIS EXPLORATORIO
+
+# TAB 2 
 # ==================================================
 with tab2:
     st.header("Análisis Exploratorio de Datos")
@@ -396,8 +391,8 @@ with tab2:
             )
             st.plotly_chart(fig_corr, use_container_width=True)
 
-# ==================================================
-# TAB 3 - TENDENCIAS TEMPORALES
+
+# TAB 3 
 # ==================================================
 with tab3:
     st.header("Análisis de Tendencias Temporales")
@@ -499,8 +494,8 @@ with tab3:
                 delta="Mejora" if rating_change > 0 else "Descenso"
             )
 
-# ==================================================
-# TAB 4 - INSIGHTS AVANZADOS
+
+# TAB 4 
 # ==================================================
 with tab4:
     st.header("Insights y Análisis Avanzado")
@@ -560,8 +555,7 @@ with tab4:
         )
 
 
-# ==================================================
-# TAB 5 - NLP (Wordclouds)
+# TAB 5 
 # ==================================================
 with tab5:
     st.header("Análisis NLP: Word Clouds")
@@ -572,15 +566,15 @@ with tab5:
     with col1:
         st.subheader("Word Cloud 1 - Términos más frecuentes en reseñas positivas")
         # Ruta relativa si la carpeta images está en el root del repo
-        st.image("https://raw.githubusercontent.com/yerquin15/Videojuegos-dashboard/main/imagenes/positive_binary.png", use_container_width=True)
-        st.image("https://raw.githubusercontent.com/yerquin15/Videojuegos-dashboard/main/imagenes/positive_frecuency.png", use_container_width=True)
-        st.image("https://raw.githubusercontent.com/yerquin15/Videojuegos-dashboard/main/imagenes/positive_tfidf.png", use_container_width=True)
+        st.image("https://raw.githubusercontent.com/yerquin15/Proyecto-AVD-Videojuegos/main/imagenes/positive_binary.png", use_container_width=True)
+        st.image("https://raw.githubusercontent.com/yerquin15/Proyecto-AVD-Videojuegos/main/imagenes/positive_frecuency.png", use_container_width=True)
+        st.image("https://raw.githubusercontent.com/yerquin15/Proyecto-AVD-Videojuegos/main/imagenes/positive_tfidf.png", use_container_width=True)
         
     with col2:
         st.subheader("Word Cloud 2 - Términos más frecuentes en todas las reseñas")
-        st.image("https://raw.githubusercontent.com/yerquin15/Videojuegos-dashboard/main/imagenes/negative_binary_tags.png", use_container_width=True)
-        st.image("https://raw.githubusercontent.com/yerquin15/Videojuegos-dashboard/main/imagenes/negative_frecuency.png", use_container_width=True)
-        st.image("https://raw.githubusercontent.com/yerquin15/Videojuegos-dashboard/main/imagenes/negative_tfidf.png", use_container_width=True)
+        st.image("https://raw.githubusercontent.com/yerquin15/Proyecto-AVD-Videojuegos/main/imagenes/negative_binary_tags.png", use_container_width=True)
+        st.image("https://raw.githubusercontent.com/yerquin15/Proyecto-AVD-Videojuegos/main/imagenes/negative_frecuency.png", use_container_width=True)
+        st.image("https://raw.githubusercontent.com/yerquin15/Proyecto-AVD-Videojuegos/main/imagenes/negative_tfidf.png", use_container_width=True)
 
     st.markdown("---")
     
@@ -590,8 +584,7 @@ with tab5:
     Palabras grandes = más frecuentes. Esto ayuda a identificar temas comunes como mecánicas de juego, emociones de los jugadores, géneros populares, etc.
     """)
 
-# ==================================================
-# TAB 6 - ANÁLISIS DE CORRELACIONES
+# TAB 6 
 # ==================================================
 with tab6:
     st.header("Análisis de Correlaciones")
@@ -624,7 +617,7 @@ with tab6:
 
        
 
-        # --- GRÁFICAS ESPECÍFICAS ---
+        # GRÁFICAS 
         st.subheader("Relaciones Clave Destacadas")
 
         col1, col2 = st.columns(2)
